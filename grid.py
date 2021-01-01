@@ -22,7 +22,7 @@ def grid(path):
 	frame.pack(fill=BOTH,expand=1)
 
 	#adding the image
-	img_tk = PhotoImage(file="img/goalkeeper.png")
+	img_tk = PhotoImage(file=path)
 	canvas.create_image(0,0,image=img_tk,anchor="nw")
 	canvas.config(scrollregion=canvas.bbox(ALL))
 
@@ -43,9 +43,9 @@ def grid(path):
 	
 	return pos_points
 
-def load(path,pos_points):
+def load(path,pos_points,output_path):
 	# Load the image
-	img = plt.imread("img/goalkeeper.png")
+	img = plt.imread(path)
 
 	# Designate points
 	top_left = pos_points[0]
@@ -71,8 +71,8 @@ def load(path,pos_points):
 	plt.axis('off')
 	plt.grid(b=None)
 	plt.imshow(img)
-	plt.savefig("output/fig1")
+	plt.savefig(sys.argv[2])
 	
 if __name__ == '__main__':
 	pos_points = grid(sys.argv[1])
-	load(sys.argv[1],pos_points)
+	load(sys.argv[1],pos_points,sys.argv[2])
