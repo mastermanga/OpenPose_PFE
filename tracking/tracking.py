@@ -68,8 +68,8 @@ def track(track_folder, video, colorLower,colorUpper, pts):
     # show the frame to our screen
         name = video.split('/',2)[-1]
         name = name.split('.',1)[0]
-        cv2.imwrite(os.path.join(track_folder , str(name) + 'video.jpg'), frame)
-        cv2.imwrite(os.path.join(track_folder , str(name) + '.jpg'), img)
+        cv2.imwrite(os.path.join(track_folder , str(name) + 'video.png'), frame)
+        cv2.imwrite(os.path.join(track_folder , str(name) + '.png'), img)
         key = cv2.waitKey(1) & 0xFF
         
         if key == ord("q"):
