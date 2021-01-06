@@ -39,7 +39,7 @@ if __name__ == '__main__':
         e = TfPoseEstimator(get_graph_path(args.model), target_size=(w, h))
 
     # estimate human poses from a single image !
-    pic = "../tracking/img/goalkeeper.png"
+    pic = "../analysis/img/goalkeeper.png"
     image = common.read_imgfile(pic, None, None)
     if image is None:
         logger.error('Image can not be read, path=%s' % args.image)
