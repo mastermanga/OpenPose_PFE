@@ -3,6 +3,9 @@ import logging
 import sys
 import time
 
+import sys
+sys.path.insert(0, "../OpenPose") 
+
 from tf_pose import common
 import cv2
 import numpy as np
@@ -21,7 +24,8 @@ logger.addHandler(ch)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='tf-pose-estimation run')
-    parser.add_argument('--image', type=str, default='./images/p1.jpg')
+    parser.add_argument('--image', type=str, default='./img/goalkeeper.png')
+    parser.add_argument('--output', type=str, default='.')
     parser.add_argument('--model', type=str, default='mobilenet_thin',
                         help='cmu / mobilenet_thin / mobilenet_v2_large / mobilenet_v2_small')
     parser.add_argument('--resize', type=str, default='432x368',
@@ -38,8 +42,10 @@ if __name__ == '__main__':
     else:
         e = TfPoseEstimator(get_graph_path(args.model), target_size=(w, h))
 
+
     # estimate human poses from a single image !
-    pic = "../analysis/img/goalkeeper.png"
+    # pic = "video/track/bleu1video.png"
+    pic = args.image
     image = common.read_imgfile(pic, None, None)
     if image is None:
         logger.error('Image can not be read, path=%s' % args.image)
@@ -61,7 +67,7 @@ if __name__ == '__main__':
         #a.set_title('Result')
         pic_color = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         #plt.imshow(pic_color)
-        cv2.imwrite('../Gardien/Gardien_OpenPose_Color.png', pic_color)
+        cv2.imwrite(args.output + '/Gardien_OpenPose_Color.png', pic_color)
         #bgimg = cv2.cvtColor(image.astype(np.uint8), cv2.COLOR_BGR2RGB)
         #bgimg = cv2.resize(bgimg, (e.heatMat.shape[1], e.heatMat.shape[0]), interpolation=cv2.INTER_AREA)
 
@@ -88,9 +94,9 @@ if __name__ == '__main__':
         plt.imshow(tmp2_even, cmap=plt.cm.Greys)
         figure = plt.gcf()
         figure.set_size_inches(8, 6)
-        plt.savefig("../Gardien/Gardien_OpenPose_Greys.png", dpi=100)
+        plt.savefig(args.output + "/Gardien_OpenPose_Greys.png", dpi=100)
         #plt.colorbar()
-        plt.show()
+        #plt.show()
 
     except Exception as e:
         logger.warning('matplitlib error, %s' % e)
