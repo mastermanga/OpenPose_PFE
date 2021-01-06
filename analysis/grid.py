@@ -1,5 +1,5 @@
 # Final version
-import sys
+import argparse
 from tkinter import *
 import pylab as plt
 
@@ -34,16 +34,22 @@ def grid(path):
 	def printcoords(event):
 		#outputting x and y coords to console
 		pos_points.append((int(event.y),int(event.x)))
+		f = open('coords.txt','a+')
+		f.write(str(event.y)+','+str(event.x)+'\n')
+		f.close()
 		if (len(pos_points) == 2):
 			root.destroy()
+		
 	#mouseclick event
 	canvas.bind("<ButtonPress-1>",printcoords)
 
 	root.mainloop()
+
+
 	
 	return pos_points
 
-def load(path,pos_points,output_path):
+def load(path,output_path,pos_points):
 	# Load the image
 	img = plt.imread(path)
 
@@ -71,13 +77,19 @@ def load(path,pos_points,output_path):
 	plt.axis('off')
 	plt.grid(b=None)
 	plt.imshow(img)
-	plt.savefig(sys.argv[2],bbox_inches='tight')
+	plt.savefig(output_path,bbox_inches='tight')
 	
 if __name__ == '__main__':
+	parser = argparse.ArgumentParser(description='grid sketch')
+	parser.add_argument('--image', type=str, default='img/goalkeeper.png')
+	parser.add_argument('--output', type=str, default='output/fig1.png')
+
+	args = parser.parse_args()
+
 	try:
 		with open('coords.txt') as f:
 			pos_points = [tuple(map(int, i.split(','))) for i in f]
 	except IOError:
-		pos_points = grid(sys.argv[1])
-	
-	load(sys.argv[1],pos_points,sys.argv[2])
+		pos_points = grid(args.image)
+
+	load(args.image,args.output,pos_points)

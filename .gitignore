@@ -1,2 +1,3 @@
-output/fig1.png
+analysis/output
+analysis/coords.txt
 .ipynb_checkpoints/
