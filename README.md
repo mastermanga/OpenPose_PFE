@@ -49,17 +49,26 @@ asdf
 
 You can run a full analysis on a specific image or run each part of the analysis indivdually
 
-Full analysis : asdf
+To perform full analysis on a single image :
+
+```bash
+$ cd analysis
+$ ./full_analysis.sh
+```
+
+Then input the image and output directory
 
 ### Openpose analysis
 
-Run :
+For an analysis performed on a single image, run :
 
 ```bash
-$ python analyse.py
+$ cd analysis
+$ python analyse_image.py --image <path-to-image> --output <output-directory>
 ```
 
 ### Cross tracking
+
 
 
 ### Grid positionnin draw
