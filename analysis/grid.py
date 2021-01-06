@@ -71,7 +71,7 @@ def load(path,pos_points,output_path):
 	plt.axis('off')
 	plt.grid(b=None)
 	plt.imshow(img)
-	plt.savefig(sys.argv[2])
+	plt.savefig(sys.argv[2],bbox_inches='tight')
 	
 if __name__ == '__main__':
 	pos_points = grid(sys.argv[1])
