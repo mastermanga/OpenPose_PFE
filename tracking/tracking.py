@@ -37,7 +37,6 @@ def track(track_folder, video, colorLower,colorUpper, pts):
         mask = cv2.dilate(mask, None, iterations=2)
 
         # find contours in the mask and initialize the current
-        # (x, y) center 
         cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
         cnts = imutils.grab_contours(cnts)
         center = None
@@ -47,7 +46,6 @@ def track(track_folder, video, colorLower,colorUpper, pts):
         # it to compute the minimum enclosing circle and
         # centroid
             c = max(cnts, key=cv2.contourArea)
-            ((x, y), radius) = cv2.minEnclosingCircle(c)
             M = cv2.moments(c)
             center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
         # update the points queue
@@ -62,15 +60,16 @@ def track(track_folder, video, colorLower,colorUpper, pts):
         # if either of the tracked points are None, ignore
             if pts[i - 1] is None or pts[i] is None:
                 continue
-            cv2.line(frame, pts[i - 1], pts[i], (0,0,255),2)
+            cv2.line(frame, pts[i-1], pts[i], (0,0,255),2)
             cv2.line(img, pts[i - 1], pts[i], (0,0,255),2)
 
     # show the frame to our screen
+        #cv2.imshow("Frame",frame)
         name = video.split('/',2)[-1]
         name = name.split('.',1)[0]
         cv2.imwrite(os.path.join(track_folder , str(name) + 'video.jpg'), frame)
         cv2.imwrite(os.path.join(track_folder , str(name) + '.jpg'), img)
-        key = cv2.waitKey(1) & 0xFF
+        key = cv2.waitKey(1)
         
         if key == ord("q"):
             break
@@ -79,10 +78,11 @@ def track(track_folder, video, colorLower,colorUpper, pts):
     cv2.destroyAllWindows()
 
 
-colorLower = np.array([115, 100, 86], np.uint8) 
-colorUpper = np.array([135, 220, 166], np.uint8) 
-pts = deque(maxlen=64)
+colorLower = np.array([30, 52, 72], np.uint8) 
+colorUpper = np.array([90, 255, 255], np.uint8) 
 
 for vs in video_name:
+    pts = deque(maxlen=64)
     print(vs)
+    cv2.destroyAllWindows()
     track(track_folder, vs, colorLower, colorUpper, pts)
