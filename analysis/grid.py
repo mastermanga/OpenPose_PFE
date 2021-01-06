@@ -74,5 +74,10 @@ def load(path,pos_points,output_path):
 	plt.savefig(sys.argv[2],bbox_inches='tight')
 	
 if __name__ == '__main__':
-	pos_points = grid(sys.argv[1])
+	try:
+		with open('coords.txt') as f:
+			pos_points = [tuple(map(int, i.split(','))) for i in f]
+	except IOError:
+		pos_points = grid(sys.argv[1])
+	
 	load(sys.argv[1],pos_points,sys.argv[2])
