@@ -2,17 +2,15 @@ import argparse
 import logging
 import time
 import numpy as np
-import cv2
-import time
 import os
 import random
 import cv2
-import numpy as np
+from datetime import date
 
 def read_vid():
     
-    name = random.choice(os.listdir("../Attaquant/"))
-    path = "../Attaquant/"+name
+    name = random.choice(os.listdir("attack_seq/"))
+    path = "attack_seq/"+name
     cap = cv2.VideoCapture(path)
     rate = cap.get(cv2.CAP_PROP_FPS)
     if (cap.isOpened()== False): 
@@ -29,11 +27,13 @@ def read_vid():
             break
     cap.release()
     cv2.destroyAllWindows()
+    return name
 
 
 def record_vid(name):
     print("record_vid load")
-    file = '../Gardien/'+ name +'.avi'
+    # name = vid = goal/test/test_1
+    file = name +'.avi'
     cap = cv2.VideoCapture(0)
     t0 = time.time()
     if (cap.isOpened() == False): 
@@ -66,7 +66,7 @@ def record_vid(name):
     cv2.destroyAllWindows() 
 
 def script(iterations, name):
-    path = "../Gardien/" + name
+    path = "goal/" + name
     path = path + "/"
     print(path)
     try:
@@ -78,10 +78,21 @@ def script(iterations, name):
         
     for n in range(1, iterations+1):
         print("Read video :" + str(n))
-        read_vid()
+        attack_name = read_vid()
         print("Record video :" + str(n))
-        vid = path + name + '_'+ str(n)
+        vid = path + name + '_' + attack_name + '_' + str(n)
         print(vid)
+        # vid = 'goal/test/test_1'
         record_vid(vid)
         
-script(2,"test")
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='recording simulation run')
+    parser.add_argument('--runs', type=int, default=1)
+
+    args = parser.parse_args()
+
+    today = date.today()
+    curr_date = today.strftime("%b-%d-%Y")
+    print("Current date =", curr_date)
+    script(args.runs,'Training '+ curr_date)
