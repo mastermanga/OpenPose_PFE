@@ -53,6 +53,9 @@ def load(path,output_path,pos_points):
 	# Load the image
 	img = plt.imread(path)
 
+	img_name = path.split('/')[-1]
+	img_name = img_name.split('.',1)[0]
+
 	# Designate points
 	top_left = pos_points[0]
 	bot_right = pos_points[1]
@@ -70,19 +73,21 @@ def load(path,output_path,pos_points):
 	grid_color = [0,0,0]
 
 	# Modify the image to include the grid
-	img[top_left[0]:bot_right[0] ,top_left[1]::dy,:] = grid_color
-	img[top_left[0]::dx,top_left[1]:bot_right[1],:] = grid_color
+	### 1st value defines the vertical range, second value defines the horizontal range
+
+	img[top_left[0]:bot_right[0] ,top_left[1]:bot_right[1]:dy,:] = grid_color # Vertical lines
+	img[top_left[0]:bot_right[0]:dx,top_left[1]:bot_right[1],:] = grid_color # Horizontal lines
 
 	# Store the result
 	plt.axis('off')
 	plt.grid(b=None)
 	plt.imshow(img)
-	plt.savefig(output_path,bbox_inches='tight')
+	plt.savefig(output_path + '/' + img_name + '_grid.png' ,bbox_inches='tight')
 	
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description='grid sketch')
 	parser.add_argument('--image', type=str, default='img/goalkeeper.png')
-	parser.add_argument('--output', type=str, default='output/fig1.png')
+	parser.add_argument('--output', type=str, default='output')
 
 	args = parser.parse_args()
 

@@ -55,10 +55,13 @@ def track(track_folder, video, name, colorLower,colorUpper, pts):
 
         # show the frame to our screen
         #cv2.imshow("Frame",frame)
-        name = name.split('/',2)[-1]
+        name = name.split('/')[-1]
         name = name.split('.',1)[0]
-        cv2.imwrite(os.path.join(track_folder , str(name) + 'video.png'), frame)
-        cv2.imwrite(os.path.join(track_folder , str(name) + '.png'), img)
+        cv2.imwrite(os.path.join(track_folder , str(name) + '_tra.png'), frame)
+        # cv2.imwrite(os.path.join(track_folder , str(name) + '.png'), img)
+        
+        
+
         key = cv2.waitKey(1)
         
         if key == ord("q"):
@@ -72,6 +75,8 @@ if __name__ == '__main__':
     ap = argparse.ArgumentParser()
     ap.add_argument("-v", "--video",
         help="path to the (optional) video file")
+    ap.add_argument("-o", "--output",
+        help="path to the output directory")
     args = vars(ap.parse_args())
 
     if not args.get("video", False):
@@ -80,13 +85,14 @@ if __name__ == '__main__':
         vs = cv2.VideoCapture(args["video"])
     time.sleep(2.0)
 
-    directory = op.expanduser('video')
-    video_folder = op.join(directory, 'hockey')
-    track_folder = op.join(directory, 'track')
+    # directory = op.expanduser('video')
+    # video_folder = op.join(directory, 'hockey')
+    # track_folder = op.join(directory, 'track')
 
     # video_name = op.join(video_folder, args["video"])
 
     video_name = args["video"]
+    track_folder = args["output"]
 
     colorLower = np.array([30, 52, 72], np.uint8) 
     colorUpper = np.array([90, 255, 255], np.uint8) 

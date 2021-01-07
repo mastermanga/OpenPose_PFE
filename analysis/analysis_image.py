@@ -46,6 +46,10 @@ if __name__ == '__main__':
     # estimate human poses from a single image !
     # pic = "video/track/bleu1video.png"
     pic = args.image
+
+    pic_name = pic.split('/')[-1]
+    pic_name = pic_name.split('.',1)[0]
+
     image = common.read_imgfile(pic, None, None)
     if image is None:
         logger.error('Image can not be read, path=%s' % args.image)
@@ -67,7 +71,7 @@ if __name__ == '__main__':
         #a.set_title('Result')
         pic_color = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         #plt.imshow(pic_color)
-        cv2.imwrite(args.output + '/Gardien_OpenPose_Color.png', pic_color)
+        cv2.imwrite(args.output + '/' + pic_name + '_opp.png', pic_color)
         #bgimg = cv2.cvtColor(image.astype(np.uint8), cv2.COLOR_BGR2RGB)
         #bgimg = cv2.resize(bgimg, (e.heatMat.shape[1], e.heatMat.shape[0]), interpolation=cv2.INTER_AREA)
 
@@ -94,7 +98,7 @@ if __name__ == '__main__':
         plt.imshow(tmp2_even, cmap=plt.cm.Greys)
         figure = plt.gcf()
         figure.set_size_inches(8, 6)
-        plt.savefig(args.output + "/Gardien_OpenPose_Greys.png", dpi=100)
+        plt.savefig(args.output + '/' + pic_name + '_opp_grey.png', dpi=100)
         #plt.colorbar()
         #plt.show()
 
