@@ -1,6 +1,6 @@
 # EFREI M2 Final Project - AI Movement detection with Openpose - Unemployed Frogs
 
-This project is an EFREI student project in collaboration with the french sport instiue **INSEP**. The project is an algorithm that simulates a training environment for cross hockey goalkeeper (eventually used by other disciplines later on). The algorithms are based on Open Source technologies such as Open Pose and OpenCV libraries.
+This project is an EFREI student project in collaboration with the french sport institute **INSEP**. The project is an algorithm that simulates a training environment for cross hockey goalkeeper (eventually used by other disciplines later on). The algorithms are based on Open Source technologies such as Open Pose and OpenCV libraries.
 
 More info on their repos :
 
@@ -98,7 +98,7 @@ The *grid.py* script simply open the image in a web interface to draw a 5x5 grid
 
 To run, launch:
 ```bash
-$ python grid.py <path-to-image> <path-to-output>
+$ python grid.py --image <path-to-image> --output <path-to-output>
 ```
 Specified paths can be absolute or relative
 
