@@ -102,7 +102,14 @@ $ python analyse_image.py --image <path-to-image> --output <output-directory>
 
 ### Cross tracking
 
-The *track.py* script opens a video and 
+The *track.py* script opens a video and tries to follow the position of the cross wielded by the goalkeeper using a color-tracker (the color specified here is green)
+
+To use it, run :
+
+```bash
+$ cd analysis
+$ python track.py 
+```
 
 ### Grid positionnin draw
 
@@ -110,6 +117,7 @@ The *grid.py* script simply open the image in an interface to draw a 5x5 grid ar
 
 To run, launch:
 ```bash
+$ cd analysis
 $ python grid.py --image <path-to-image> --output <path-to-output>
 ```
 **To redefine coordinates, simply delete the coords.txt file**
