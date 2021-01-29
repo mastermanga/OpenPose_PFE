@@ -13,7 +13,7 @@ More info on their repos :
 
 You need dependencies below.
 
-- python3
+- python 3.7
 - tensorflow 1.4.1+ BUT NOT 2.0+
 - opencv3, protobuf, python3-tk
 
