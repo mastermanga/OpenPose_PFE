@@ -98,7 +98,7 @@ if __name__ == '__main__':
 
     grey = cv2.imread(args.output + '/' + pic_name.replace('_first','') + '_opp.png')
     a = cv2.line(grey, pos, pos_, (34,0,255),4)
-    cv2.imwrite(args.output + '/' + pic_name.replace('_first','') + '___opp_white.png', a)
+    cv2.imwrite(args.output + '/' + pic_name.replace('_first','') + '_opp_white_vector.png', a)
     
     
     ##### 

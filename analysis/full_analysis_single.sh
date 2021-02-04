@@ -1,8 +1,9 @@
 #!/bin/bash
 
-
-input_vid=$1
-output_dir=$2
+echo "Please specify video path >"
+read input_vid
+echo "Please specify output directory >" 
+read output_dir
 
 video_file=`basename "$input_vid"`
 video_name="${video_file%.*}"
@@ -36,3 +37,4 @@ echo $input_grid
 python grid.py --image $input_grid --output $output_dir
 
 echo Analysis completed, please refer to $output_dir directory for results
+
