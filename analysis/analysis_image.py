@@ -25,6 +25,8 @@ logger.addHandler(ch)
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='tf-pose-estimation run')
     parser.add_argument('--image', type=str, default='./img/goalkeeper.png')
+    parser.add_argument('--image_last', type=str, default='./img/goalkeeper.png')
+    parser.add_argument('--image_white', type=str, default='./img/goalkeeper.png')
     parser.add_argument('--output', type=str, default='.')
     parser.add_argument('--model', type=str, default='mobilenet_thin',
                         help='cmu / mobilenet_thin / mobilenet_v2_large / mobilenet_v2_small')
@@ -45,10 +47,11 @@ if __name__ == '__main__':
 
     # estimate human poses from a single image !
     # pic = "video/track/bleu1video.png"
+    
+    #first frame args:image
     pic = args.image
 
-    pic_name = pic.split('/')[-1]
-    pic_name = pic_name.split('.',1)[0]
+    pic_name = pic.split('/')[-1].split('.',1)[0]
 
     image = common.read_imgfile(pic, None, None)
     if image is None:
@@ -56,20 +59,62 @@ if __name__ == '__main__':
         sys.exit(-1)
 
     t = time.time()
-    humans = e.inference(image, resize_to_default=(w > 0 and h > 0), upsample_size=args.resize_out_ratio)
+    humans_first = e.inference(image, resize_to_default=(w > 0 and h > 0), upsample_size=args.resize_out_ratio)
     elapsed = time.time() - t
 
     logger.info('inference image: %s in %.4f seconds.' % (args.image, elapsed))
 
-    image = TfPoseEstimator.draw_humans(image, humans, imgcopy=False)
+    # loading the white image and draw the skeleton of the first frame
+    white_image = common.read_imgfile(args.image_white, None, None)
+    
+    pos, skeleton_first = TfPoseEstimator.draw_humans(white_image, humans_first, imgcopy=False)
+    
+    print('human_first_pos')
+    print(pos)
+
+    # last frame extracting skeleton 
+    last_image = common.read_imgfile(args.image_last, None, None)
+    
+    if last_image is None:
+        logger.error('Image can not be read, path=%s' % args.image_last)
+        sys.exit(-1)
+
+    t = time.time()
+    humans_last = e.inference(last_image, resize_to_default=(w > 0 and h > 0), upsample_size=args.resize_out_ratio)
+    elapsed = time.time() - t
+
+    logger.info('inference image: %s in %.4f seconds.' % (args.image_last, elapsed))
+
+    grey_skeleton = cv2.cvtColor(skeleton_first, cv2.COLOR_BGR2GRAY)
+    cv2.imwrite(args.output + '/' + pic_name.replace('_first','') + '_opp.png',grey_skeleton)
+    
+    grey_white = cv2.imread(args.output + '/' + pic_name.replace('_first','') + '_opp.png')
+    pos_, skeleton = TfPoseEstimator.draw_humans(grey_white, humans_last, imgcopy=False)
+
+    cv2.imwrite(args.output + '/' + pic_name.replace('_first','') + '_opp_white.png', skeleton)
+
+    #print('posi_last')
+    #print(pos_)
+
+    grey = cv2.imread(args.output + '/' + pic_name.replace('_first','') + '_opp.png')
+    a = cv2.line(grey, pos, pos_, (34,0,255),4)
+    cv2.imwrite(args.output + '/' + pic_name.replace('_first','') + '___opp_white.png', a)
+    
+    
+    ##### 
+    #changing image to imag
+    posi, imag_first = TfPoseEstimator.draw_humans(image, humans_first, imgcopy=False)
+    poos, imag_last = TfPoseEstimator.draw_humans(last_image, humans_last, imgcopy=False)
 
     try:
         import matplotlib.pyplot as plt
 
+        ## First image
+
         fig = plt.figure()
         #a = fig.add_subplot(2, 2, 1)
         #a.set_title('Result')
-        pic_color = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        pic_color = cv2.cvtColor(imag_first, cv2.COLOR_BGR2RGB)
         #plt.imshow(pic_color)
         cv2.imwrite(args.output + '/' + pic_name + '_opp.png', pic_color)
         #bgimg = cv2.cvtColor(image.astype(np.uint8), cv2.COLOR_BGR2RGB)
@@ -85,7 +130,6 @@ if __name__ == '__main__':
         tmp2 = e.pafMat.transpose((2, 0, 1))
         tmp2_odd = np.amax(np.absolute(tmp2[::2, :, :]), axis=0)
         tmp2_even = np.amax(np.absolute(tmp2[1::2, :, :]), axis=0)
-        
         #a = fig.add_subplot(2, 2, 3)
         #a.set_title('Vectormap-x')
         # plt.imshow(CocoPose.get_bgimg(inp, target_size=(vectmap.shape[1], vectmap.shape[0])), alpha=0.5)
@@ -95,12 +139,20 @@ if __name__ == '__main__':
         #a = fig.add_subplot()
         #a.set_title('Vectormap-y')
         # plt.imshow(CocoPose.get_bgimg(inp, target_size=(vectmap.shape[1], vectmap.shape[0])), alpha=0.5)
+        
         plt.imshow(tmp2_even, cmap=plt.cm.Greys)
         figure = plt.gcf()
         figure.set_size_inches(8, 6)
         plt.savefig(args.output + '/' + pic_name + '_opp_grey.png', dpi=100)
         #plt.colorbar()
         #plt.show()
+
+        # Last image         
+        imag_last_color = cv2.cvtColor(imag_last, cv2.COLOR_BGR2RGB)
+        pic_last_name = args.image_last.split('/')[-1].split('.',1)[0]
+        cv2.imwrite(args.output + '/' + pic_last_name + '_opp.png', imag_last_color)
+
+
 
     except Exception as e:
         logger.warning('matplitlib error, %s' % e)

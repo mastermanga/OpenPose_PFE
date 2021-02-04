@@ -12,8 +12,8 @@ import os
 
 
 def track(track_folder, video, name, colorLower,colorUpper, pts):
-    
-    while True:
+    i=0
+    while (vs.isOpened()):
         frame = vs.read()
         frame = frame [1]
         
@@ -21,6 +21,7 @@ def track(track_folder, video, name, colorLower,colorUpper, pts):
             break
         
         frame = imutils.resize(frame, width=600)
+
         blurred = cv2.GaussianBlur(frame, (11, 11), 0)
         hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
         
@@ -51,21 +52,34 @@ def track(track_folder, video, name, colorLower,colorUpper, pts):
             if pts[i - 1] is None or pts[i] is None:
                 continue
             cv2.line(frame, pts[i-1], pts[i], (0,0,255),2)
-            cv2.line(img, pts[i - 1], pts[i], (0,0,255),2)
+            cv2.line(img, pts[i - 1], pts[i], (0,0,0),2)
+        
+        f = vs.read()
+        f = f [1]
+
+        if f is None:
+            break
+
+        f = imutils.resize(f,width=600)
 
         # show the frame to our screen
         #cv2.imshow("Frame",frame)
         name = name.split('/')[-1]
         name = name.split('.',1)[0]
         cv2.imwrite(os.path.join(track_folder , str(name) + '_tra.png'), frame)
-        # cv2.imwrite(os.path.join(track_folder , str(name) + '.png'), img)
-        
-        
+        cv2.imwrite(os.path.join(track_folder , str(name) + '_white.png'), img)
+        cv2.imwrite(os.path.join(track_folder , str(name) + '_last.png'), f)
 
+        ### first frame/image
+        if i == 0:
+            cv2.imwrite(os.path.join(track_folder , str(name) + '_first.png'), frame)
+                
         key = cv2.waitKey(1)
         
         if key == ord("q"):
             break
+
+        i += 1
     
     vs.release()
     cv2.destroyAllWindows()
