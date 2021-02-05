@@ -1,4 +1,5 @@
 # coding: utf-8
+from functools import partial
 from tkinter import *
 
 # Import header.py and functions.py
@@ -22,7 +23,7 @@ window = header.header()
 lfBienvenue = LabelFrame(window, text=" Bienvenue ", padx=10, pady=10)
 
 #TODO
-btnLancer = Button(window, text='Lancer', command=functions.avant_simulation)
+btnLancer = Button(window, text='Lancer', command=partial(functions.avant_simulation, window))
 btnQuitter = Button(window, text='Quitter', command=window.quit)
 
 frameCnt = 36
