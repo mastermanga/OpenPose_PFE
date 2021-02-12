@@ -57,7 +57,7 @@ def read_and_record(output_path,n):
 
                 t1 = time.time() # current time
                 num_seconds = t1 - t0 # diff
-                if num_seconds > duration + 4:
+                if num_seconds > duration + 2:
                     break
         else:
             break 

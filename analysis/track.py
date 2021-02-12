@@ -66,7 +66,7 @@ def track(track_folder, video, name, colorLower,colorUpper, pts):
         #cv2.imshow("Frame",frame)
         name = name.split('/')[-1]
         name = name.split('.',1)[0]
-        cv2.imwrite(os.path.join(track_folder , str(name) + '_tra.png'), frame)
+        # cv2.imwrite(os.path.join(track_folder , str(name) + '_tra.png'), frame)
         cv2.imwrite(os.path.join(track_folder , str(name) + '_white.png'), img)
         cv2.imwrite(os.path.join(track_folder , str(name) + '_last.png'), f)
 
