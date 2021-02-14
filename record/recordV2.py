@@ -5,7 +5,7 @@ import numpy as np
 import os
 import random
 import cv2
-from datetime import date
+from datetime import datetime
 
 def read_and_record(output_path,n):
     # Attack sequence initialization 
@@ -34,7 +34,10 @@ def read_and_record(output_path,n):
 
 
     # Write camera feed in directory
-    output_vid = output_path + '_' + atk_name + '_' + str(n) + '.avi'
+    now = now = datetime.now() # current time
+    curr_time = now.strftime("%H:%M:%S")
+
+    output_vid = output_path + '_' + curr_time + '_' + atk_name + '.avi'
     out = cv2.VideoWriter(output_vid,cv2.VideoWriter_fourcc('M','J','P','G'), goal_rate,(frame_width,frame_height))
 
 
@@ -89,7 +92,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    today = date.today()
-    curr_date = today.strftime("%b-%d-%Y")
-    print("Current date =", curr_date)
-    script(args.runs,'Training '+ curr_date)
+    now = datetime.now() # current date and time
+
+    curr_date = now.strftime("%b-%d-%Y")
+    script(args.runs,curr_date)
