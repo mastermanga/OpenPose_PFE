@@ -7,6 +7,8 @@ output_dir=$2
 video_file=`basename "$input_vid"`
 video_name="${video_file%.*}"
 
+mkdir -p $output_dir
+
 ## 1- Launch tracking
 
 python track.py --video $input_vid --output $output_dir

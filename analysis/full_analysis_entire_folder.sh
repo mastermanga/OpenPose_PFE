@@ -1,9 +1,7 @@
 #!/bin/bash
 
-echo "Please specify videos folder directory >"
-read input_directory
-echo "Please specify output directory >" 
-read output_dir
+input_directory=$1
+output_dir=$2
 
 for file in $input_directory/*
 do
