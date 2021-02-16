@@ -9,8 +9,8 @@ from datetime import date
 
 def read_and_record(output_path,n):
     # Attack sequence initialization 
-    atk_name = random.choice(os.listdir("attack_seq/"))
-    atk_path = "attack_seq/"+ atk_name
+    atk_name = random.choice(os.listdir("../record/attack_seq/"))
+    atk_path = "../record/attack_seq/"+ atk_name
     atk_cap = cv2.VideoCapture(atk_path)
 
     atk_cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
@@ -68,7 +68,7 @@ def read_and_record(output_path,n):
 
 
 def script(iterations, name):
-    path = "goal/" + name + "/"
+    path = "../record/goal/" + name + "/"
     try:
         os.mkdir(path)
     except OSError:

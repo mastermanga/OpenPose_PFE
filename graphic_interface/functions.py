@@ -8,8 +8,8 @@ import cv2
 def lancer_simulation(spinbox, box):
     try:
         nb_run = str(spinbox.get())
-        box.destroy()
-        os.system('python ../record/record.py --runs ' + nb_run)
+        # box.destroy()
+        os.system('python ../record/recordV2.py --runs ' + nb_run)
     except IndexError:
         print("No file selected")
 
@@ -32,48 +32,3 @@ def avant_simulation(window):
     label.pack(side=TOP)
     spinbox.pack()
     btn.pack(side=BOTTOM, padx=80, pady=5)
-
-
-"""---------------------------------------------------------------------------------------"""
-
-
-def open_video(video_path):
-    if sys.platform in ("linux", "linux2"):
-        os.system("xdg-open " + video_path)
-    elif sys.platform == "win32":
-        print("windows")
-    elif sys.platform == "darwin":
-        print("mac")
-    else:
-        print("platform not supported")
-
-
-def get_frame(video_filename):
-    video = cv2.VideoCapture(video_filename)
-
-    return video.read()
-
-
-def image_to_thumbs(img):
-    height, width, channels = img.shape
-    thumbs = {"original": img}
-    sizes = [640, 320, 160]
-    for size in sizes:
-        if width >= size:
-            r = (size + 0.0) / width
-            max_size = (size, int(height * r))
-            thumbs[str(size)] = cv2.resize(img, max_size, interpolation=cv2.INTER_AREA)
-    return thumbs
-
-
-def write_thumbs(video_path):
-    image = get_frame(video_path)
-    thumbs = image_to_thumbs(image[1])
-
-    try:
-        os.mkdir("./videos/mp4/02-01-2021/thumbs")
-    except:
-        pass
-
-    for t in thumbs:
-        cv2.imwrite("./videos/mp4/02-01-2021/thumbs/" + t + ".png", thumbs[t])
