@@ -27,8 +27,10 @@ def avant_simulation(window):
     box.protocol('WM_DELETE_WINDOW', partial(on_closing, box, window))
     label = Label(box, text="Combien d'attaques voulez-vous lancer ?")
     spinbox = Spinbox(box, from_=1, to=10, width=2)
-    btn = Button(box, text="Lancer", command=partial(lancer_simulation, spinbox, box))
+    btn_lancer = Button(box, text="Lancer", command=partial(lancer_simulation, spinbox, box))
+    btn_pre = Button(box, text="Revenir à l'accueil", command=partial(on_closing, box, window))
 
     label.pack(side=TOP)
     spinbox.pack()
-    btn.pack(side=BOTTOM, padx=80, pady=5)
+    btn_lancer.pack(side=LEFT, padx=15, pady=5)
+    btn_pre.pack(side=RIGHT, padx=15, pady=5)
