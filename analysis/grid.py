@@ -92,7 +92,7 @@ if __name__ == '__main__':
 	args = parser.parse_args()
 
 	try:
-		with open('coords.txt') as f:
+		with open('analysis/coords.txt') as f:
 			pos_points = [tuple(map(int, i.split(','))) for i in f]
 	except IOError:
 		pos_points = grid(args.image)

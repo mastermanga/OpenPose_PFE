@@ -5,7 +5,7 @@ import time
 import os
 
 import sys
-sys.path.insert(0, "../OpenPose") 
+sys.path.insert(0, "OpenPose") 
 
 from tf_pose import common
 import cv2
@@ -52,7 +52,7 @@ if __name__ == '__main__':
     #first frame args:image
     pic = args.image
 
-    pic_name = pic.split('/')[-1].split('.',1)[0]
+    pic_name = pic.split('/')[-1].split('.')[0] + '.' + pic.split('/')[-1].split('.')[1]  
 
     image = common.read_imgfile(pic, None, None)
     if image is None:
@@ -170,9 +170,9 @@ if __name__ == '__main__':
     if os.path.exists(args.image_last):
       os.remove(args.image_last)
     else:
-      print("First image not found")
+      print("Last image not found")
 
     if os.path.exists(args.image_white):
       os.remove(args.image_white)
     else:
-      print("First image not found")
+      print("White image not found")
