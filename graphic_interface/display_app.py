@@ -3,15 +3,16 @@ from functools import partial
 import tkinter as tk
 from PIL import Image, ImageTk
 import functions
+import image_button
 
 class Display_App():
-    def __init__(self, defense_folder, attack_folder, analysis_folder, wh, ww):
+    def __init__(self, pwindow, defense_folder, attack_folder, analysis_folder, wh, ww):
         self.defense_folder = defense_folder
         self.attack_folder = attack_folder
         self.analysis_folder = analysis_folder
 #         self.wh, self.ww = wh, ww
         
-        self.create_window(wh, ww)
+        self.create_window(pwindow, wh, ww)
         self.create_main_frame()
         self.create_rec_button()
         self.create_menus()
@@ -41,20 +42,25 @@ class Display_App():
         
     def get_analysis(self):
         date = self.parse_video_name(self.current_video)[0]
-        defense = self.current_video
+        defense = self.current_video.split('.')[0]
         
-        for analysis in os.listdir(self.analysis_folder + date + '/'):
-            if analysis == defense:
-                return self.analysis_folder + date + '/' + analysis
+        if os.path.exists(self.analysis_folder + date + '/'):
+        
+            for analysis in os.listdir(self.analysis_folder + date + '/'):
+                if analysis.startswith(defense) and "_grid" in analysis:
+                    return self.analysis_folder + date + '/' + analysis
         
         return None
     
     def launch_analysis(self):
-        f = open(self.analysis_folder + self.parse_video_name(self.current_video)[0] + '/' + self.current_video, "x")
+        date = self.parse_video_name(self.current_video)[0]
+        command = "./analysis/full_analysis_parent.sh {} {}".format(self.get_defense(), self.analysis_folder + date + '/')
+        os.system(command)
+
         self.update_display_frame(None)
         
-    def create_window(self, wh, ww):
-        self.window = tk.Tk()
+    def create_window(self, pwindow, wh, ww):
+        self.window = tk.Toplevel(master=pwindow)
         self.window.geometry("{}x{}".format(ww, wh))
         self.window.minsize(int(ww/2), int(wh/2))
         self.window.maxsize(int(ww*2), int(wh*2))
@@ -76,10 +82,13 @@ class Display_App():
         self.btn.place(relheight=1.0, relwidth=1.0)
         
     def create_menus(self):
-        self.frame_2 = tk.Frame(self.main_frame, bd=4, relief="ridge", bg="pink")
+        self.frame_2 = tk.Frame(self.main_frame, bd=4, relief="ridge")
         self.frame_2.grid(column=0, row=1, columnspan=3, rowspan=11, sticky="nesw")
         
         date_list = os.listdir(self.defense_folder)
+        for d in date_list:
+            if not os.listdir(self.defense_folder + d):
+                date_list.remove(d)
         date_list.sort(reverse=True)
 
         self.date_var = tk.StringVar()
@@ -116,23 +125,43 @@ class Display_App():
         self.update_display_frame(time)
 
     def create_display_frame(self):
-        self.frame_3 = tk.Frame(self.main_frame, bd=4, relief="ridge", bg="pink")
+        self.frame_3 = tk.Frame(self.main_frame, bd=4, relief="ridge")
         self.frame_3.grid(column=3, row=0, columnspan=9, rowspan=12, sticky="nesw")
         
         if self.get_analysis():
-            self.raw_defense = tk.Button(self.frame_3, text=self.get_defense(), bd=2, relief="raised")
+            defense_image = Image.fromarray(functions.get_frame(self.get_defense())[1])
+            defense_txt = self.get_defense().split('/')[-1]
+            
+            # self.raw_defense = tk.Button(self.frame_3, text=self.get_defense(), bd=2, relief="raised")
+            self.raw_defense = image_button.img_btn(self.frame_3, defense_image, defense_txt, self.get_defense())
             self.raw_defense.place(relheight=0.4, relwidth=0.45, relx=0.3, rely=0.05)
 
-            self.attack = tk.Button(self.frame_3, text=self.get_attack(), bd=2, relief="raised")
+            attack_image = Image.fromarray(functions.get_frame(self.get_attack())[1])
+            attack_txt = self.get_attack().split('/')[-1]
+
+            # self.attack = tk.Button(self.frame_3, text=self.get_attack(), bd=2, relief="raised")
+            self.attack = image_button.img_btn(self.frame_3, attack_image, attack_txt, self.get_attack())
             self.attack.place(relheight=0.4, relwidth=0.45, relx=0.025, rely=0.55)
 
-            self.analysis = tk.Button(self.frame_3, text=self.get_analysis(), bd=2, relief="raised")
+            analysis_image = Image.fromarray(functions.get_frame(self.get_analysis())[1])
+            analysis_txt = self.get_analysis().split('/')[-1].split('_')[-1]
+            
+            # self.analysis = tk.Button(self.frame_3, text=self.get_analysis(), bd=2, relief="raised")
+            self.analysis = image_button.img_btn(self.frame_3, analysis_image, analysis_txt, self.get_analysis())
             self.analysis.place(relheight=0.4, relwidth=0.45, relx=0.525, rely=0.55)
         else:
-            self.raw_defense = tk.Button(self.frame_3, text=self.get_defense(), bd=2, relief="raised")
+            defense_image = Image.fromarray(functions.get_frame(self.get_defense())[1])
+            defense_txt = self.get_defense().split('/')[-1]
+            
+            # self.raw_defense = tk.Button(self.frame_3, text=self.get_defense(), bd=2, relief="raised")
+            self.raw_defense = image_button.img_btn(self.frame_3, defense_image, defense_txt, self.get_defense())
             self.raw_defense.place(relheight=0.35, relwidth=0.45, relx=0.3, rely=0.05)
 
-            self.attack = tk.Button(self.frame_3, text=self.get_attack(), bd=2, relief="raised")
+            attack_image = Image.fromarray(functions.get_frame(self.get_attack())[1])
+            attack_txt = self.get_attack().split('/')[-1]
+
+            # self.attack = tk.Button(self.frame_3, text=self.get_attack(), bd=2, relief="raised")
+            self.attack = image_button.img_btn(self.frame_3, attack_image, attack_txt, self.get_attack())
             self.attack.place(relheight=0.35, relwidth=0.45, relx=0.3, rely=0.5)
 
             self.analysis = tk.Button(self.frame_3, text="launch analysis", bd=2, relief="raised", command=self.launch_analysis)

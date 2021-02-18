@@ -2,9 +2,10 @@ import argparse
 import logging
 import sys
 import time
+import os
 
 import sys
-sys.path.insert(0, "../OpenPose") 
+sys.path.insert(0, "OpenPose") 
 
 from tf_pose import common
 import cv2
@@ -51,7 +52,7 @@ if __name__ == '__main__':
     #first frame args:image
     pic = args.image
 
-    pic_name = pic.split('/')[-1].split('.',1)[0]
+    pic_name = pic.split('/')[-1].split('.')[0] + '.' + pic.split('/')[-1].split('.')[1]  
 
     image = common.read_imgfile(pic, None, None)
     if image is None:
@@ -140,10 +141,10 @@ if __name__ == '__main__':
         #a.set_title('Vectormap-y')
         # plt.imshow(CocoPose.get_bgimg(inp, target_size=(vectmap.shape[1], vectmap.shape[0])), alpha=0.5)
         
-        plt.imshow(tmp2_even, cmap=plt.cm.Greys)
-        figure = plt.gcf()
-        figure.set_size_inches(8, 6)
-        plt.savefig(args.output + '/' + pic_name + '_opp_grey.png', dpi=100)
+        # plt.imshow(tmp2_even, cmap=plt.cm.Greys)
+        # figure = plt.gcf()
+        # figure.set_size_inches(8, 6)
+        # plt.savefig(args.output + '/' + pic_name + '_opp_grey.png', dpi=100)
         #plt.colorbar()
         #plt.show()
 
@@ -158,3 +159,20 @@ if __name__ == '__main__':
         logger.warning('matplitlib error, %s' % e)
         cv2.imshow('result', image)
         cv2.waitKey()
+
+    # Deleting old files 
+
+    if os.path.exists(args.image):
+      os.remove(args.image)
+    else:
+      print("First image not found") 
+
+    if os.path.exists(args.image_last):
+      os.remove(args.image_last)
+    else:
+      print("Last image not found")
+
+    if os.path.exists(args.image_white):
+      os.remove(args.image_white)
+    else:
+      print("White image not found")

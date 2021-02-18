@@ -11,7 +11,7 @@ mkdir -p $output_dir
 
 ## 1- Launch tracking
 
-python track.py --video $input_vid --output $output_dir
+python analysis/track.py --video $input_vid --output $output_dir
 
 echo "Tracking completed" 
 
@@ -25,7 +25,7 @@ input_white_opp="${output_dir}/${video_name}_white.png"
 
 echo $input_first_opp
 
-python analysis_image.py --image $input_first_opp --image_last $input_last_opp --image_white $input_white_opp --output $output_dir
+python analysis/analysis_image.py --image $input_first_opp --image_last $input_last_opp --image_white $input_white_opp --output $output_dir
 
 echo "Openpose analysis completed"
 
@@ -35,6 +35,6 @@ input_grid="${output_dir}/${video_name}_opp_white.png"
 
 echo $input_grid
 
-python grid.py --image $input_grid --output $output_dir
+python analysis/grid.py --image $input_grid --output $output_dir
 
 echo Analysis completed, please refer to $output_dir directory for results

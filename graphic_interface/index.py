@@ -5,7 +5,20 @@ from tkinter import *
 # Import header.py and functions.py
 import header
 import functions
+import display_app
 
+def open_records(window):
+    # window.withdraw()
+    defense_folder = "./record/goal/"
+    attack_folder = "./record/attack_seq/"
+    analysis_folder = "./analysis/"
+
+    wh = 600
+    ww = 900
+
+    dis_app = display_app.Display_App(window, defense_folder, attack_folder, analysis_folder, wh, ww)
+
+    dis_app.run()
 
 # Functions
 def update(ind):
@@ -25,6 +38,7 @@ lfBienvenue = LabelFrame(window, text=" Bienvenue ", padx=10, pady=10)
 #TODO
 btnLancer = Button(window, text='Lancer', command=partial(functions.avant_simulation, window))
 btnQuitter = Button(window, text='Quitter', command=window.quit)
+btnAnalyse = Button(window, text='Voir analyses', command=partial(open_records, window))
 
 frameCnt = 36
 frames = [PhotoImage(file="graphic_interface/" + 'hocket.gif', format='gif -index %i' % i) for i in range(frameCnt)]
@@ -38,6 +52,7 @@ label = Label(lfBienvenue)
 label.pack(side=TOP)
 btnLancer.pack(side=LEFT, padx=80, pady=5)
 btnQuitter.pack(side=RIGHT, padx=80, pady=5)
+btnAnalyse.pack(padx=80, pady=5)
 
 window.after(0, update, 0)
 window.mainloop()
