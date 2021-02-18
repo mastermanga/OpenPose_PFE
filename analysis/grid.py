@@ -34,7 +34,7 @@ def grid(path):
 	def printcoords(event):
 		#outputting x and y coords to console
 		pos_points.append((int(event.y),int(event.x)))
-		f = open('coords.txt','a+')
+		f = open('./analysis/coords.txt','a+')
 		f.write(str(event.y)+','+str(event.x)+'\n')
 		f.close()
 		if (len(pos_points) == 2):

@@ -156,7 +156,7 @@ if __name__ == '__main__':
     #attack
     attack = name.split('_',2)[-1]
     # attack_path = video_name.split('/')[0] + '/attack_seq/' + attack + '.mp4'
-    attack_path = video_name.split('/')[0] + '/attack_seq/' + attack 
+    attack_path = './record/attack_seq/' + attack 
     attack_vs = cv2.VideoCapture(attack_path)
     time_attack = float(attack_vs.get(cv2.CAP_PROP_FRAME_COUNT)) / float(attack_vs.get(cv2.CAP_PROP_FPS))
         
