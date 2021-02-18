@@ -34,3 +34,42 @@ def avant_simulation(window):
     spinbox.pack()
     btn_lancer.pack(side=LEFT, padx=15, pady=5)
     btn_pre.pack(side=RIGHT, padx=15, pady=5)
+    
+def open_video(video_path):
+    if sys.platform in ("linux", "linux2"):
+        os.system("xdg-open " + video_path)
+    elif sys.platform == "win32":
+        video_path = video_path.replace('/', '\\')
+        os.system("start " + video_path)
+    elif sys.platform == "darwin":
+        os.system("open " + video_path)
+    else:
+        print("platform not supported")
+        
+def get_frame(video_filename): 
+    video = cv2.VideoCapture(video_filename)
+    
+    return video.read()
+
+def image_to_thumbs(img):
+    height, width, channels = img.shape
+    thumbs = {"original": img}
+    sizes = [640, 320, 160]
+    for size in sizes:
+        if (width >= size):
+            r = (size + 0.0) / width
+            max_size = (size, int(height * r))
+            thumbs[str(size)] = cv2.resize(img, max_size, interpolation=cv2.INTER_AREA)
+    return thumbs
+
+def write_thumbs(video_path):
+    image = get_frame(video_path)
+    thumbs = image_to_thumbs(image[1])
+
+    try:
+        os.mkdir("./videos/mp4/02-01-2021/thumbs")
+    except:
+        pass
+
+    for t in thumbs:
+        cv2.imwrite("./videos/mp4/02-01-2021/thumbs/" + t + ".png", thumbs[t])
