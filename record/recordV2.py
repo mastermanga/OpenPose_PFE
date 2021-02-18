@@ -5,12 +5,12 @@ import numpy as np
 import os
 import random
 import cv2
-from datetime import date
+from datetime import datetime
 
-def read_and_record(output_path,n):
+def read_and_record(output_path, n):
     # Attack sequence initialization 
-    atk_name = random.choice(os.listdir("../record/attack_seq/"))
-    atk_path = "../record/attack_seq/"+ atk_name
+    atk_name = random.choice(os.listdir("./record/attack_seq/"))
+    atk_path = "./record/attack_seq/"+ atk_name
     atk_cap = cv2.VideoCapture(atk_path)
 
     atk_cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
@@ -34,7 +34,10 @@ def read_and_record(output_path,n):
 
 
     # Write camera feed in directory
-    output_vid = output_path + '_' + atk_name + '_' + str(n) + '.avi'
+    now = now = datetime.now() # current time
+    curr_time = now.strftime("%H:%M:%S")
+
+    output_vid = output_path + '_' + curr_time + '_' + atk_name + '.avi'
     out = cv2.VideoWriter(output_vid,cv2.VideoWriter_fourcc('M','J','P','G'), goal_rate,(frame_width,frame_height))
 
 
@@ -57,7 +60,7 @@ def read_and_record(output_path,n):
 
                 t1 = time.time() # current time
                 num_seconds = t1 - t0 # diff
-                if num_seconds > duration + 4:
+                if num_seconds > duration + 2:
                     break
         else:
             break 
@@ -68,7 +71,7 @@ def read_and_record(output_path,n):
 
 
 def script(iterations, name):
-    path = "../record/goal/" + name + "/"
+    path = "./record/goal/" + name + "/"
     try:
         os.mkdir(path)
     except OSError:
@@ -89,7 +92,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    today = date.today()
-    curr_date = today.strftime("%b-%d-%Y")
-    print("Current date =", curr_date)
-    script(args.runs,'Training '+ curr_date)
+    now = datetime.now() # current date and time
+
+    curr_date = now.strftime("%b-%d-%Y")
+    script(args.runs,curr_date)

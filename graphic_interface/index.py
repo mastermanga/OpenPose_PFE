@@ -27,7 +27,7 @@ btnLancer = Button(window, text='Lancer', command=partial(functions.avant_simula
 btnQuitter = Button(window, text='Quitter', command=window.quit)
 
 frameCnt = 36
-frames = [PhotoImage(file='hocket.gif', format='gif -index %i' % i) for i in range(frameCnt)]
+frames = [PhotoImage(file="graphic_interface/" + 'hocket.gif', format='gif -index %i' % i) for i in range(frameCnt)]
 
 
 # Deploy "window"

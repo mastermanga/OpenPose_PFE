@@ -9,7 +9,7 @@ def lancer_simulation(spinbox, box):
     try:
         nb_run = str(spinbox.get())
         # box.destroy()
-        os.system('python ../record/recordV2.py --runs ' + nb_run)
+        os.system('python ./record/recordV2.py --runs ' + nb_run)
     except IndexError:
         print("No file selected")
 
