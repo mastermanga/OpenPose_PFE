@@ -35,7 +35,7 @@ def read_and_record(output_path, n):
 
     # Write camera feed in directory
     now = now = datetime.now() # current time
-    curr_time = now.strftime("%H:%M:%S")
+    curr_time = now.strftime("%H-%M-%S")
 
     output_vid = output_path + '_' + curr_time + '_' + atk_name + '.avi'
     out = cv2.VideoWriter(output_vid,cv2.VideoWriter_fourcc('M','J','P','G'), goal_rate,(frame_width,frame_height))
